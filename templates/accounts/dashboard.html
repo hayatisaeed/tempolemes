@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="row">
+
+    <!-- Sidebar -->
+    <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+      <div class="position-sticky pt-3">
+        <ul class="nav flex-column">
+          <li class="nav-item mb-2">
+            <a class="nav-link active" aria-current="page" href="#">
+              <i class="bi bi-speedometer2 me-2"></i> Dashboard
+            </a>
+          </li>
+          <li class="nav-item mb-2">
+            <a class="nav-link" href="#">
+              <i class="bi bi-person me-2"></i> Profile
+            </a>
+          </li>
+          <li class="nav-item mb-2">
+            <a class="nav-link" href="#">
+              <i class="bi bi-gear me-2"></i> Settings
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-danger" href="{% url 'logout' %}">
+              <i class="bi bi-box-arrow-right me-2"></i> Logout
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Main content -->
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Welcome, {{ user.username }}!</h1>
+      </div>
+
+      <!-- Example Cards -->
+      <div class="row">
+        <div class="col-md-6 col-lg-4 mb-4">
+          <div class="card shadow-sm h-100">
+            <div class="card-body">
+              <h5 class="card-title">Profile Info</h5>
+              <p class="card-text">Username: {{ user.username }}</p>
+              <p class="card-text">Email: {{ user.email }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4 mb-4">
+          <div class="card shadow-sm h-100">
+            <div class="card-body">
+              <h5 class="card-title">Account Actions</h5>
+              <a href="#" class="btn btn-primary btn-sm me-2">Edit Profile</a>
+              <a href="{% url 'logout' %}" class="btn btn-outline-danger btn-sm">Logout</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4 mb-4">
+          <div class="card shadow-sm h-100">
+            <div class="card-body">
+              <h5 class="card-title">Statistics</h5>
+              <p class="card-text">Here you can display user stats or metrics.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,4 @@
+from .customers import *
+from .deals import *
+from .products import *
+from .tasks import *
