@@ -1,7 +1,23 @@
 # Tempolemes
 
-## 
+## Initialize project locally
 
+### method 1: use setup.py file
+it's very simple; just copy and paste this line in your terminal (MacOS/Linux):
+```bash
+python3 setup.py
+```
+
+or for windows:
+```bash
+python setup.py
+```
+
+### method 2: manually
+
+if for any reason first one did'nt work or you don't want to use it, just follow these steps:
+
+first, clone repository:
 ```bash
 git clone https://github.com/hayatisaeed/tempolemes.git
 ```
