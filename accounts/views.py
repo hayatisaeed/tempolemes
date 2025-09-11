@@ -31,6 +31,13 @@ class UserLoginView(LoginView):
 
 class UserLogoutView(LogoutView):
     next_page = reverse_lazy('login')  # where to send the user after logout
+    http_method_names = ['get', 'post']  # allow GET and POST
+
+    def get(self, request, *args, **kwargs):
+        """
+        Allow logout via GET request.
+        """
+        return self.post(request, *args, **kwargs)
 
 
 class DashboardView(TemplateView):

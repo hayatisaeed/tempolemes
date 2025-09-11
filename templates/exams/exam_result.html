@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mx-auto py-8">
+    <h1 class="text-2xl font-bold mb-6">Exam Result</h1>
+    <pre>{{ result|dictsort:"key" }}</pre>
+
+
+
+    <div class="bg-white shadow-md rounded-lg p-6">
+        <h2 class="text-xl font-semibold mb-4">Exam: {{ exam_name }}</h2>
+        <p><strong>Student:</strong> {{ student_name }}</p>
+        <p><strong>Participation Date:</strong> {{ start_date|date:"F j, Y, g:i a" }}</p>
+
+        <hr class="my-4">
+
+        <p><strong>Score:</strong> 
+            {% if result.score %}
+                {{ result.score }}
+            {% else %}
+                Not graded yet
+            {% endif %}
+        </p>
+
+        <p><strong>Graded By:</strong> 
+            {% if result.graded_by %}
+                {{ result.graded_by.get_full_name }}
+            {% else %}
+                Not graded yet
+            {% endif %}
+        </p>
+
+        <p><strong>Grade Date:</strong> 
+            {% if result.grade_date %}
+                {{ result.grade_date|date:"F j, Y, g:i a" }}
+            {% else %}
+                Not graded yet
+            {% endif %}
+        </p>
+
+        <p><strong>Feedback:</strong></p>
+        <div class="bg-gray-100 p-4 rounded">
+            {% if result.feedback %}
+                {{ result.feedback }}
+            {% else %}
+                No feedback provided
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="mt-6">
+        <a href="{% url 'exam-list' %}" class="text-blue-500 hover:underline">Back to Exams</a>
+    </div>
+</div>
+{% endblock %}

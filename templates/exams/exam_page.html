@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <!-- Exam Header -->
+    <div class="mb-4 text-center">
+        <h2 class="fw-bold">{{ object.exam.title }}</h2>
+        <p class="text-muted">
+            Upload your answer file below. Once submitted, your participation will be marked as complete.
+        </p>
+        <span class="badge bg-danger">Submission Deadline: {{ end_time }}</span>
+        <span id="countdown" class="badge bg-warning text-dark ms-2"></span>
+    </div>
+
+    <!-- Exam Details Card -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title">Exam Details</h5>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><strong>Exam Name:</strong> {{ exam.title }}</li>
+                <li class="list-group-item"><strong>Duration:</strong> {{ exam.duration_minutes }} minutes</li>
+                <li class="list-group-item"><strong>Start Time:</strong> {{ participation.start_date }}</li>
+                <li class="list-group-item"><strong>Related Course:</strong> {{ exam.related_course }}</li>
+                <li class="list-group-item">
+                    <strong>Download Questions:</strong> 
+                    <a href="{{ exam.questions_file.url }}" class="link-primary" target="_blank">
+                        {{ exam.questions_file.name|default:"Download" }}
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Answer Submission Form -->
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title mb-3">Submit Your Answer</h5>
+            <form id="examForm" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="mb-3">
+        {{ form.answer_file.label_tag }} (.pdf Only)
+        {{ form.answer_file }} 
+        {% if form.answer_file.errors %}
+            <div class="text-danger mt-1">
+                {{ form.answer_file.errors }}
+            </div>
+        {% endif %}
+    </div>
+
+    <button type="submit" class="btn btn-success">
+        Submit Answers
+    </button>
+</form>
+            <!-- Progress bar -->
+<div class="progress mb-3" style="height: 25px; display:none;" id="uploadProgressContainer">
+    <div class="progress-bar progress-bar-striped progress-bar-animated" 
+        role="progressbar" style="width: 0%" id="uploadProgressText">
+        0%
+    </div>
+</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Use UTC ISO string so JS interprets correctly
+    const deadline = new Date("{{ end_time|date:'Y-m-d\\TH:i:s' }}Z").getTime();
+
+    const countdownElement = document.getElementById("countdown");
+
+    const interval = setInterval(() => {
+        const now = new Date().getTime();
+        const distance = deadline - now;
+
+        if (distance <= 0) {
+            clearInterval(interval);
+            countdownElement.innerText = "Time's up!";
+            return;
+        }
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        countdownElement.innerText =
+            (days > 0 ? days + "d " : "") +
+            hours + "h " +
+            minutes + "m " +
+            seconds + "s";
+    }, 1000);
+</script>
+
+<!-- Progress Bar -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const form = document.getElementById("examForm");
+    const progressContainer = document.getElementById("uploadProgressContainer");
+    const progressBar = document.getElementById("uploadProgressText");
+
+    const fileInput = form.querySelector('input[type="file"]');
+    fileInput.setAttribute("accept", ".pdf");
+
+    form.addEventListener("submit", function(e) {
+        e.preventDefault();
+
+        if (!fileInput.files.length) {
+            alert("Please select a PDF file.");
+            return;
+        }
+
+        progressContainer.style.display = "block";
+
+        // Phase 1: fake 0 -> 50% in 3 seconds
+        let fakeProgress = 0;
+        const fakeDuration = 3000;
+        const fakeIntervalTime = 50;
+        const fakeStep = 50 / (fakeDuration / fakeIntervalTime);
+
+        const fakeTimer = setInterval(() => {
+            fakeProgress += fakeStep;
+            if (fakeProgress >= 50) {
+                fakeProgress = 50;
+                clearInterval(fakeTimer);
+
+                // Phase 2: start actual upload
+                startRealUpload();
+            }
+            progressBar.style.width = fakeProgress + "%";
+            progressBar.innerText = Math.floor(fakeProgress) + "%";
+        }, fakeIntervalTime);
+
+        function startRealUpload() {
+            const formData = new FormData(form);
+            const xhr = new XMLHttpRequest();
+
+            xhr.open("POST", form.action, true);
+            xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+
+            xhr.upload.addEventListener("progress", function(e) {
+                if (e.lengthComputable) {
+                    const percent = 50 + (e.loaded / e.total) * 50;
+                    progressBar.style.width = percent + "%";
+                    progressBar.innerText = Math.floor(percent) + "%";
+                }
+            });
+
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    progressBar.style.width = "100%";
+                    progressBar.innerText = "Upload complete!";
+                    window.location.href = "{% url 'exam-submitted' %}";
+                } else {
+                    progressBar.innerText = "Upload failed!";
+                    progressBar.classList.add("bg-danger");
+                }
+            };
+
+            xhr.send(formData);
+        }
+    });
+});
+</script>
+
+
+
+{% endblock %}

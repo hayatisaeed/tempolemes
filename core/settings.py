@@ -30,6 +30,11 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+# Media
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'  # or your actual media folder path
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -155,5 +160,7 @@ JAZZMIN_SETTINGS = {
         "exams.ExamParticipation": "fas fa-file-upload",
         "payments.Payment": "fas fa-credit-card",
         "payments.Installment": "fas fa-wallet",
+        "courses.CourseEnrollment": "fas fa-user-graduate",
+        "exams.ExamResult": "fas fa-clipboard-check",
     },
 }

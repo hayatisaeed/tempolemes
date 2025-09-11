@@ -205,3 +205,23 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+media/
+
+# Django migrations
+*/migrations/*.py
+*/migrations/*.pyc
+!*/migrations/__init__.py
+
+# PDF files
+*.pdf
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Database (if local SQLite)
+*.sqlite3
+
+# Environment files
+.env

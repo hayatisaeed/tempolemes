@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+{% block title %}{{ exam.title }}{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+      <h2 class="mb-0">{{ exam.title }}</h2>
+    </div>
+    <div class="card-body">
+      {% if exam.description %}
+      <p class="mb-4">{{ exam.description }}</p>
+      {% endif %}
+
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <strong>{% trans "Course" %}:</strong> {{ exam.related_course.name }}
+        </div>
+        <div class="col-md-6">
+          <strong>{% trans "Duration" %}:</strong> {{ exam.duration_minutes }} {% trans "minutes" %}
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <strong>{% trans "Start Date" %}:</strong> {{ exam.start_date|date:"Y-m-d" }}
+        </div>
+        <div class="col-md-6">
+          <strong>{% trans "End Date" %}:</strong> {{ exam.end_date|date:"Y-m-d" }}
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <strong>{% trans "Total Marks" %}:</strong> {{ exam.total_marks }}
+        </div>
+      </div>
+
+      <hr>
+      
+      <div class="text-center">
+        {% if can_view_result %}
+          <a href="{% url 'exam-result' exam.id %}" class="btn btn-success btn-lg">
+            {% trans "Show Result" %}
+          </a>
+        {% endif %}
+        {% if can_start %}
+          <a href="{% url 'exam-start' exam.id %}" class="btn btn-success btn-lg">
+            {% trans "Start Exam Now" %}
+          </a>
+        {% endif %}
+      </div>
+      {% if not can_start and not can_view_result %}
+      <div class="alert alert-info text-center" role="alert">
+        {% trans "You have already completed this exam. wait for results." %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
