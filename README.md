@@ -5,11 +5,15 @@
 ### method 1: use setup.py file
 it's very simple; just copy and paste this line in your terminal (MacOS/Linux):
 ```bash
+git clone https://github.com/hayatisaeed/tempolemes.git
+cd tempolemes
 python3 setup.py
 ```
 
 or for windows:
 ```bash
+git clone https://github.com/hayatisaeed/tempolemes.git
+cd tempolemes
 python setup.py
 ```
 
