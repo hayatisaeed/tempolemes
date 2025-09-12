@@ -7,9 +7,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils import timezone
 from django.shortcuts import get_object_or_404, render
 from django.http import JsonResponse
+from accounts.mixins import ProfileCompletionRequiredMixin
 
 
-class ExamListView(LoginRequiredMixin, ListView):
+class ExamListView(ProfileCompletionRequiredMixin, ListView):
     model = Exam
     template_name = 'exams/exam_list.html'
     context_object_name = 'exams'
@@ -23,7 +24,7 @@ class ExamListView(LoginRequiredMixin, ListView):
         return context
 
 
-class ExamDetailView(LoginRequiredMixin, DetailView):
+class ExamDetailView(ProfileCompletionRequiredMixin, DetailView):
     model = Exam
     template_name = 'exams/exam_detail.html'
     context_object_name = 'exam'
@@ -45,9 +46,7 @@ class ExamDetailView(LoginRequiredMixin, DetailView):
         return context
 
 
-
-
-class ExamParticipationCreateView(LoginRequiredMixin, View):
+class ExamParticipationCreateView(ProfileCompletionRequiredMixin, View):
     """
     This view just ensures an ExamParticipation exists for the user,
     then redirects to the exam page.
@@ -74,7 +73,7 @@ class ExamParticipationCreateView(LoginRequiredMixin, View):
         return redirect('exam-page', pk=participation.pk)
 
 
-class ExamPageView(LoginRequiredMixin, UpdateView):
+class ExamPageView(ProfileCompletionRequiredMixin, UpdateView):
     model = ExamParticipation
     template_name = 'exams/exam_page.html'
     fields = ['answer_file']  # only show answer_file
@@ -141,7 +140,7 @@ class ExamPageView(LoginRequiredMixin, UpdateView):
         return context
     
 
-class ExamResultDetailView(LoginRequiredMixin, DetailView):
+class ExamResultDetailView(ProfileCompletionRequiredMixin, DetailView):
     model = ExamResult
     template_name = 'exams/exam_result.html'
     context_object_name = 'result'

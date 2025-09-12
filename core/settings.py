@@ -162,5 +162,6 @@ JAZZMIN_SETTINGS = {
         "payments.Installment": "fas fa-wallet",
         "courses.CourseEnrollment": "fas fa-user-graduate",
         "exams.ExamResult": "fas fa-clipboard-check",
+        "accounts.StudentProfile": "fas fa-id-card",
     },
 }
