@@ -1,7 +1,7 @@
 from django.db import models
 
 class Customer(models.Model):
-    related_student_profile = models.ForeignKey('accounts.StudentProfile', on_delete=models.CASCADE, null=True, blank=True)
+    related_student_profile = models.OneToOneField('accounts.StudentProfile', on_delete=models.CASCADE, null=True, blank=True, related_name='customer')
     related_user = models.OneToOneField('auth.User', on_delete=models.CASCADE, null=True, blank=True)
 
     first_name = models.CharField(max_length=100, null=True, blank=True)
@@ -14,3 +14,13 @@ class Customer(models.Model):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
+    
+
+class CustomerNote(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='notes')
+    note = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Note for {self.customer.first_name} {self.customer.last_name} at {self.created_at}"
+    

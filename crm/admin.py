@@ -1,5 +1,5 @@
 from django.contrib import admin
-from crm.models import Customer, Product, Deal, Pipeline, DealStage, Task, TaskType
+from crm.models import Customer, Product, Deal, Pipeline, DealStage, Task, TaskType, Setting
 
 
 @admin.register(Customer)
@@ -47,3 +47,8 @@ class TaskTypeAdmin(admin.ModelAdmin):
     search_fields = ('name',)
 
 
+@admin.register(Setting)
+class SettingAdmin(admin.ModelAdmin):
+    list_display = ('related_changed_model', 'crud_type', 'new_deal_stage')
+    search_fields = ('related_changed_model__model',)
+    list_filter = ('crud_type', 'new_deal_stage')

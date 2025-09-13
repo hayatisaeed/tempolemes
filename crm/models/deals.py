@@ -18,7 +18,7 @@ class DealStage(models.Model):
 
 class Deal(models.Model):
     title = models.CharField(max_length=200, null=True, blank=True)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     stage = models.ForeignKey(DealStage, on_delete=models.CASCADE, related_name='deals')
 
     related_product = models.ForeignKey('crm.Product', on_delete=models.CASCADE, null=True, blank=True)
@@ -31,3 +31,15 @@ class Deal(models.Model):
         if not self.title:
             self.title = f"Deal for {self.related_customer} - {self.related_product}"
         super().save(*args, **kwargs)
+    
+    class Meta:
+        unique_together = ('related_product', 'related_customer')
+
+
+class DealNote(models.Model):
+    deal = models.ForeignKey(Deal, on_delete=models.CASCADE, related_name='notes')
+    note = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Note for {self.deal.title} at {self.created_at}"
