@@ -13,3 +13,4 @@ class CourseEnrollmentAdmin(admin.ModelAdmin):
     list_display = ('course', 'student', 'enrollment_date')
     search_fields = ('course__name',)
     list_filter = ('enrollment_date',)
+    readonly_fields = ('enrollment_date',)

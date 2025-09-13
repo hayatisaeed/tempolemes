@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block content %}
+<div class="container mt-5">
+  <h1 class="mb-4">{{ course.name }}</h1>
+
+  {% if course.description %}
+    <p class="lead">{{ course.description }}</p>
+  {% else %}
+    <p class="text-muted">No description provided for this course.</p>
+  {% endif %}
+
+  <hr class="my-4">
+
+  <!-- Enroll button -->
+  <form action="{% url 'course-enroll' course_pk=course.pk %}" method="post" class="mb-4">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-primary btn-lg">
+      Enroll in this course
+    </button>
+  </form>
+
+  <!-- Extra info: number of enrolled students -->
+  <p class="mb-4">
+    <strong>Enrolled students:</strong> {{ course.enrollments.count }}
+  </p>
+
+  <a href="{% url 'course-list' %}" class="btn btn-secondary">
+    &larr; Back to Courses
+  </a>
+</div>
+{% endblock content %}

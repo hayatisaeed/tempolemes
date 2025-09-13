@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+  <h1 class="mb-3">{{ course.name }}</h1>
+
+  {% if course.description %}
+    <p class="lead">{{ course.description }}</p>
+  {% else %}
+    <p class="text-muted">No description provided for this course.</p>
+  {% endif %}
+
+  <hr>
+
+  <!-- Enrollment info -->
+  <p>
+    <strong>Enrollment date:</strong> {{ enrollment.enrollment_date|date:"F j, Y, g:i a" }}
+  </p>
+
+  <a href="{% url 'enrolled-course-list' %}" class="btn btn-secondary mt-3">Back to My Courses</a>
+</div>
+{% endblock content %}
